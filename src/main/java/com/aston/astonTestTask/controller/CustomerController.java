@@ -2,6 +2,7 @@ package com.aston.astonTestTask.controller;
 
 import com.aston.astonTestTask.model.Bill;
 import com.aston.astonTestTask.model.Customer;
+import com.aston.astonTestTask.model.ServiceException;
 import com.aston.astonTestTask.service.CustomerService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class CustomerController {
     @PostMapping(value = "/create")
     public ResponseEntity<Customer> create(
             @RequestParam(name = "name") String name,
-            @RequestParam(name = "pin") Integer pin) {
+            @RequestParam(name = "pin") Integer pin) throws ServiceException {
         log.info("Create user with name: {}, code: {} and start amount: {}", name, pin);
         return ResponseEntity.ok(customerService.create(name, pin));
     }
@@ -48,7 +49,7 @@ public class CustomerController {
     @PostMapping(value = "/clientAccounts")
     public ResponseEntity<List<Bill>> clientAccounts(
             @RequestParam(name = "name") String name,
-            @RequestParam(name = "pin") Integer pin) {
+            @RequestParam(name = "pin") Integer pin) throws ServiceException {
         log.info("Get client accounts for client with id {} and pin {}", name, pin);
         return ResponseEntity.ok(customerService.clientAccounts(name, pin));
     }

@@ -1,6 +1,7 @@
 package com.aston.astonTestTask.controller;
 
 import com.aston.astonTestTask.model.Action;
+import com.aston.astonTestTask.model.ServiceException;
 import com.aston.astonTestTask.service.ActionService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,7 @@ public class ActionController {
     @PostMapping(value = "/clientHistory")
     public ResponseEntity<List<Action>> clientHistory(
             @RequestParam(name = "name") String name,
-            @RequestParam(name = "pin") Integer pin) {
+            @RequestParam(name = "pin") Integer pin) throws ServiceException {
         log.info("Get client history for client with id {} and pin {}", name, pin);
         return ResponseEntity.ok(actionService.clientHistory(name, pin));
     }

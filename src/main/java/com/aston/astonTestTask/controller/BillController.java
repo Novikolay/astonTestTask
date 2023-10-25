@@ -1,6 +1,7 @@
 package com.aston.astonTestTask.controller;
 
 import com.aston.astonTestTask.model.Bill;
+import com.aston.astonTestTask.model.ServiceException;
 import com.aston.astonTestTask.service.BillService;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class BillController {
     public ResponseEntity<Bill> create(
             @RequestParam(name = "name") String name,
             @RequestParam(name = "pin") Integer pin,
-            @RequestParam(name = "amount") Integer amount) {
+            @RequestParam(name = "amount") Integer amount) throws ServiceException {
         log.info("Create user with name: {}, code: {} and start amount: {}", name, pin, amount);
         return ResponseEntity.ok(billService.create(name, pin, amount));
     }
@@ -49,7 +50,7 @@ public class BillController {
     public ResponseEntity<Bill> receive(
             @RequestParam(name = "number") String number,
             @RequestParam(name = "pin") Integer pin,
-            @RequestParam(name = "amount") Integer amount) {
+            @RequestParam(name = "amount") Integer amount) throws ServiceException {
         log.info("Receiving funds in amount {} from bill {} with code {}", amount, number, pin);
         return ResponseEntity.ok(billService.receive(number, pin, amount));
     }
@@ -61,7 +62,7 @@ public class BillController {
     @PostMapping(value = "/deposit")
     public ResponseEntity<Bill> deposit(
             @RequestParam(name = "number") String number,
-            @RequestParam(name = "amount") Integer amount) {
+            @RequestParam(name = "amount") Integer amount) throws ServiceException {
         log.info("Deposit amount {} to bill with number {}", amount, number);
         return ResponseEntity.ok(billService.deposit(number, amount));
     }
@@ -75,7 +76,7 @@ public class BillController {
             @RequestParam(name = "outNumber") String outNumber,
             @RequestParam(name = "pin") Integer pin,
             @RequestParam(name = "amount") Integer amount,
-            @RequestParam(name = "inNumber") String inNumber) {
+            @RequestParam(name = "inNumber") String inNumber) throws ServiceException {
         log.info("Transfer money {} from outNumber {} with pin {} to inNumber {}", amount, outNumber, pin, inNumber);
         return ResponseEntity.ok(billService.transfer(outNumber, pin, amount, inNumber));
     }

@@ -56,20 +56,19 @@ public class BillServiceImpl implements BillService {
      * @return
      */
     @Override
-    public Bill create(String userName, int pin, int amount) {
+    public Bill create(String userName, int pin, int amount) throws ServiceException {
         CustomerSearchCriteria searchCriteria = new CustomerSearchCriteria(userName);
         List<Customer> customers = searchUtils.search(searchCriteria);
 
         if (CollectionUtils.isNotEmpty(customers)) {
             if (!customerUtils.checkPin(customers.get(0), pin)) {
-                //TODO: сообщение о неверном пароле
-                return null;
+                throw new ServiceException("Некорректный пароль");
             }
 
-            //TODO: создаем счет уже существующему пользователю
+            // создаем счет уже существующему пользователю
             return create(customers.get(0), amount);
         } else {
-            //TODO: заводим нового пользователя и генерим ему счет
+            // заводим нового пользователя и генерим ему счет
             Customer customer = customerService.create(userName, pin);
             return create(customer, amount);
         }
@@ -87,14 +86,13 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Bill receive(String number, int pin, int amount) {
+    public Bill receive(String number, int pin, int amount) throws ServiceException {
         BillSearchCriteria searchCriteria = new BillSearchCriteria(number, null);
         List<Bill> bills = searchUtils.search(searchCriteria);
 
         if (CollectionUtils.isNotEmpty(bills)) {
             if (!customerUtils.checkPin(bills.get(0).getCustomer(), pin)) {
-                //TODO: сообщение о неверном пароле
-                return null;
+                throw new ServiceException("Некорректный пароль");
             }
 
             Bill bill = bills.get(0);
@@ -104,17 +102,15 @@ public class BillServiceImpl implements BillService {
                 billRepository.updateWithEntityManager(bill);
                 return bill;
             } else {
-                //TODO: сообщение о недостатке средств для снятия
-                return null;
+                throw new ServiceException("На указанном счете недостаточно средств для снятия");
             }
         } else {
-            //TODO: по вашему номеру счетов не найдено
-            return null;
+            throw new ServiceException("По вашему номеру счетов не найдено");
         }
     }
 
     @Override
-    public Bill deposit(String number, int amount) {
+    public Bill deposit(String number, int amount) throws ServiceException {
 
         BillSearchCriteria searchCriteria = new BillSearchCriteria(number, null);
         List<Bill> bills = searchUtils.search(searchCriteria);
@@ -126,28 +122,24 @@ public class BillServiceImpl implements BillService {
             billRepository.updateWithEntityManager(bill);
             return bill;
         } else {
-            //TODO: по вашему номеру счетов не найдено
-            return null;
+            throw new ServiceException("По вашему номеру счетов не найдено");
         }
     }
 
     @Override
-    public List<Bill> transfer(String outNumber, int pin, int amount, String inNumber) {
+    public List<Bill> transfer(String outNumber, int pin, int amount, String inNumber) throws ServiceException {
         List<Bill> billsOut = searchUtils.search(new BillSearchCriteria(outNumber, null));
         if (CollectionUtils.isEmpty(billsOut)) {
-            //TODO: по вашему номеру отправителя счетов не найдено
-            return null;
+            throw new ServiceException("По вашему номеру отправителя счетов не найдено");
         }
 
         List<Bill> billsIn = searchUtils.search(new BillSearchCriteria(inNumber, null));
         if (CollectionUtils.isEmpty(billsIn)) {
-            //TODO: по вашему номеру получателя счетов не найдено
-            return null;
+            throw new ServiceException("По вашему номеру получателя счетов не найдено");
         }
 
         if (!customerUtils.checkPin(billsOut.get(0).getCustomer(), pin)) {
-            //TODO: сообщение о неверном пароле
-            return null;
+            throw new ServiceException("Некорректный пароль");
         }
 
         Bill credit = billsOut.get(0);

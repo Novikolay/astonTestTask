@@ -1,9 +1,6 @@
 package com.aston.astonTestTask.service;
 
-import com.aston.astonTestTask.model.Bill;
-import com.aston.astonTestTask.model.BillSearchCriteria;
-import com.aston.astonTestTask.model.Customer;
-import com.aston.astonTestTask.model.CustomerSearchCriteria;
+import com.aston.astonTestTask.model.*;
 import com.aston.astonTestTask.repository.CustomerRepository;
 import com.aston.astonTestTask.utils.CustomerUtils;
 import com.aston.astonTestTask.utils.EntityNotFoundException;
@@ -38,13 +35,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer create(String name, int pin) {
+    public Customer create(String name, int pin) throws ServiceException {
         CustomerSearchCriteria searchCriteria = new CustomerSearchCriteria(name);
         List<Customer> customers = searchUtils.search(searchCriteria);
 
         if (CollectionUtils.isNotEmpty(customers)) {
-            // TODO: данный пользователь уже существует
-            return null;
+            throw new ServiceException("Данный пользователь уже существует");
         }
 
         Customer customer = new Customer();
@@ -56,21 +52,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Bill> clientAccounts(String name, int pin) {
+    public List<Bill> clientAccounts(String name, int pin) throws ServiceException {
         CustomerSearchCriteria searchCriteria = new CustomerSearchCriteria(name);
         List<Customer> customers = searchUtils.search(searchCriteria);
 
         if (CollectionUtils.isNotEmpty(customers)) {
             if (!customerUtils.checkPin(customers.get(0), pin)) {
-                //TODO: сообщение о неверном пароле
-                return null;
+                throw new ServiceException("Некорректный пароль");
             }
 
             BillSearchCriteria billSearchCriteria = new BillSearchCriteria(null, customers.get(0));
             return searchUtils.search(billSearchCriteria);
         } else {
-            //TODO: некорректное имя пользователя
-            return null;
+            throw new ServiceException("Некорректное имя пользователя");
         }
     }
 

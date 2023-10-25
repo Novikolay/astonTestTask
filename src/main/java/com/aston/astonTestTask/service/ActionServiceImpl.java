@@ -1,9 +1,6 @@
 package com.aston.astonTestTask.service;
 
-import com.aston.astonTestTask.model.Action;
-import com.aston.astonTestTask.model.ActionSearchCriteria;
-import com.aston.astonTestTask.model.Customer;
-import com.aston.astonTestTask.model.CustomerSearchCriteria;
+import com.aston.astonTestTask.model.*;
 import com.aston.astonTestTask.repository.ActionRepository;
 import com.aston.astonTestTask.utils.CustomerUtils;
 import com.aston.astonTestTask.utils.SearchUtils;
@@ -32,20 +29,18 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Override
-    public List<Action> clientHistory(String name, int pin) {
+    public List<Action> clientHistory(String name, int pin) throws ServiceException {
         CustomerSearchCriteria searchCriteria = new CustomerSearchCriteria(name);
         List<Customer> customers = searchUtils.search(searchCriteria);
 
         if (CollectionUtils.isNotEmpty(customers)) {
             if (!customerUtils.checkPin(customers.get(0), pin)) {
-                //TODO: сообщение о неверном пароле
-                return null;
+                throw new ServiceException("Некорректный пароль");
             }
 
             return search(new ActionSearchCriteria(null, customers.get(0).getId()));
         } else {
-            //TODO: данного пользователя не существует
-            return null;
+            throw new ServiceException("Данного пользователя не существует");
         }
     }
 
