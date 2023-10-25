@@ -1,0 +1,30 @@
+logging:
+  level:
+    com:
+      memorynotfound: DEBUG
+    org:
+      springframework:
+        security: INFO
+        web: INFO
+    root: WARN
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/aston_data?useUnicode=yes&characterEncoding=windows-1251
+    username: aston_user
+    password: aston123
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+server:
+  port: 8888
+swagger:
+  ui:
+    host: localhost:8888
