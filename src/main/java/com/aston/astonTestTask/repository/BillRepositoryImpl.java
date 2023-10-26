@@ -26,7 +26,7 @@ import java.util.Optional;
 public class BillRepositoryImpl implements BillRepository {
 
     private static final String SQL_GET_BILL_BY_ID =
-            "select id, customerId, amount from bills where id = :id";
+            "select id, number, customerId, amount from bills where id = :id";
     private static final String SQL_GET_ALL_BILLS =
             "select * from bills";
     private final BillMapper billMapper;

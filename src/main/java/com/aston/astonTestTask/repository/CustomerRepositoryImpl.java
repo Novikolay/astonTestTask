@@ -24,7 +24,7 @@ import java.util.Optional;
 public class CustomerRepositoryImpl implements CustomerRepository {
 
     private static final String SQL_GET_CUSTOMER_BY_ID =
-            "select id, name from customers where id = :id";
+            "select id, name, pin from customers where id = :id";
     private static final String SQL_GET_ALL_CUSTOMERS =
             "select * from customers";
 

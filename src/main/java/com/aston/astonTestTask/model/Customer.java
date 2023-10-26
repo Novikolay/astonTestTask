@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "customers")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @RequiredArgsConstructor
 @NoArgsConstructor(force = true)
 @Getter

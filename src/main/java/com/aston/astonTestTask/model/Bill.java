@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "bills")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

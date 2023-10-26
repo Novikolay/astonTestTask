@@ -11,6 +11,7 @@ import lombok.extern.java.Log;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -56,6 +57,7 @@ public class BillServiceImpl implements BillService {
      * @return
      */
     @Override
+    @Transactional
     public Bill create(String userName, int pin, int amount) throws ServiceException {
         CustomerSearchCriteria searchCriteria = new CustomerSearchCriteria(userName);
         List<Customer> customers = searchUtils.search(searchCriteria);
